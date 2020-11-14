@@ -1,5 +1,8 @@
 turtles-own [
   age
+  max-age
+  dispersal
+  step
 ]
 
 to setup
@@ -8,25 +11,38 @@ to setup
   [
     set pcolor green
   ]
-  ask n-of pob-inicial patches [
-    sprout 1   [
+  crt pob-inicial [
       set color orange
       set shape "flower"
       set size 1
-      set age random max-age
-    ]
+      let var med-age / 2
+      let alpha   med-age ^ 2 / var
+      let lambda  med-age / var
+      set max-age random-gamma alpha lambda
+      setxy random-xcor random-ycor
+      set dispersal random-float max-dispersal
+      set step random-float max-step
+
+
+    ;;show (word "media " med-age " var: " var " alpha: " alpha " lambda: " lambda " max-age: " max-age )
+      ;; media = alpha/lambda
+      ;; var   = alpha/(lambda²)
+      ;; alpha = media²/ var
+      ;; lambda = media /var
+
   ]
 
   reset-ticks
 end
 
 to go
-  if ticks = 500 [
+  if ticks = 1000 [
     stop
   ]
 
   ask turtles [
     reproduce
+    mover
     matar
   ]
 
@@ -34,14 +50,16 @@ to go
 end
 
 to reproduce
-  set age age + 1
+  set age age + 1 + step
   hatch r [
     set heading random 360
-    ifelse not any? other turtles-on patch-ahead 1
+    let empty one-of patches in-radius dispersal with [not any? turtles-here]
+    ;let target one-of patches in-radius birds-dispersal-distance with [any? forest-here  and not any? birds-here]
+    ifelse empty != nobody
     [
 
       set color color + 10
-      fd 1
+      move-to empty
       set age 1
     ]
     [ die ]
@@ -50,6 +68,12 @@ to reproduce
   ]
 
 
+end
+
+to mover
+  lt random 90
+  rt random 90
+  fd step
 end
 
 to matar
@@ -95,7 +119,7 @@ r
 r
 1
 10
-5.0
+1.0
 1
 1
 NIL
@@ -138,10 +162,10 @@ NIL
 MONITOR
 755
 15
-907
+940
 60
 NIL
-mean [age] of turtles
+mean [max-age] of turtles
 5
 1
 11
@@ -154,9 +178,9 @@ SLIDER
 pob-inicial
 pob-inicial
 0
-1000
-100.0
 100
+100.0
+1
 1
 NIL
 HORIZONTAL
@@ -184,11 +208,11 @@ SLIDER
 185
 190
 218
-max-age
-max-age
+med-age
+med-age
 0
 100
-20.0
+10.0
 1
 1
 NIL
@@ -201,6 +225,58 @@ MONITOR
 471
 NIL
 mean [ count turtles-here ] of patches
+5
+1
+11
+
+SLIDER
+21
+246
+193
+279
+max-step
+max-step
+0
+5
+1.0
+.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+19
+291
+191
+324
+max-dispersal
+max-dispersal
+1
+10
+4.0
+.1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+764
+496
+962
+541
+NIL
+mean [ dispersal ] of turtles
+5
+1
+11
+
+MONITOR
+766
+548
+932
+593
+NIL
+mean [ step ] of turtles
 5
 1
 11
