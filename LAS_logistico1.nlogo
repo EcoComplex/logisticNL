@@ -13,7 +13,7 @@ to setup
       set color orange
       set shape "flower"
       set size 1
-      set age 1
+      set age random max-age
     ]
   ]
 
@@ -36,10 +36,11 @@ end
 to reproduce
   set age age + 1
   hatch r [
+    set heading random 360
     ifelse not any? other turtles-on patch-ahead 1
     [
+
       set color color + 10
-      set heading random 360
       fd 1
       set age 1
     ]
@@ -52,7 +53,7 @@ to reproduce
 end
 
 to matar
-   if age > 20 [
+   if age > max-age [
       ;show "ME MORRRRRRRRRRRRRRRRRIIIIIIIIIIII"
       die
   ]
@@ -94,7 +95,7 @@ r
 r
 1
 10
-1.0
+5.0
 1
 1
 NIL
@@ -137,10 +138,10 @@ NIL
 MONITOR
 755
 15
-851
+907
 60
 NIL
-count turtles
+mean [age] of turtles
 5
 1
 11
@@ -178,12 +179,41 @@ false
 PENS
 "default" 1.0 0 -16777216 true "" "plot count turtles"
 
+SLIDER
+18
+185
+190
+218
+max-age
+max-age
+0
+100
+20.0
+1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+766
+426
+1030
+471
+NIL
+mean [ count turtles-here ] of patches
+5
+1
+11
+
 @#$#@#$#@
 ## Modelo logistico Basado en el individuo
 
-Los individuos se reproducen con una tasa r
+Los individuos se reproducen con una tasa máxima r
 
-Alimento/espacio que son los parches
+Alimento es variable en el espacio (parches) y la tasa de reproduccion varia de acuerdo a esto.
+
+Opción de que los individuos sean móviles 
+
 
 # ODD
 
