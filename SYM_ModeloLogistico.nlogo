@@ -9,29 +9,31 @@ to setup
   clear-all ;;siempre
 
   ask patches [
-    set algas random 100
+    set algas random 20
     recolor-algas
   ]
+
   ask n-of pob-ini patches [
     sprout 1 [
-       set color orange
-    set shape "turtle"
-      set size 0.5
+      set color red
+      set shape "turtle"
+      set size 2
       set age random max-age
       set energia random 50
-]
+    ]
   ]
 
   reset-ticks ;;siempre
 end
 
 to go
-  if ticks = 500[
+  if ticks = 500 [
     stop
   ]
   ask turtles [
     reproduce
-    matar
+    matar-mover
+
     envejecer
     eat
     starve
@@ -41,52 +43,64 @@ to go
 end
 
 to reproduce
-  set age age + 1
-  set energia energia - 5
-  hatch r [
-    set color color + 10
-    fd random 3
-    rt random 360
-    set age 1
-    set energia random 10
-    ifelse not any? other turtles-on patch-ahead 1
-  [fd 1]
-  [die]
+  if energia >= 10 [
+    ;show "Reproducido !!"
+    set energia energia - 5
+    hatch r [
+      set color color + 10
+      fd random 3
+      rt random 360
+      set age 1
+      set energia random 3
+      ;if any? other turtles-on patch-here
+      ;[
+      ;  show "Me mori al nacer!!!!!!!!!!!!!!!"
+      ;  die
+      ;]
+    ]
   ]
 end
 
-to matar
-    ifelse not any? other turtles-on patch-ahead 1
-   [fd 1]
-  [die
-  print "mori desplazado"]
+to matar-mover
+  ifelse not any? other turtles-on patch-ahead 1
+  [
+    fd 1
+  ]
+  [
+    ;show "mori desplazado"
+    ;die
+  ]
 end
 
 to envejecer
-  set energia energia - 5
+  set energia energia - gasto-energia
+  set age age + 1
   if age >= max-age
-  [die
-  print "mori de vejez"
+  [
+    ;show "mori de vejez"
+    die
   ]
 end
 
 to recolor-algas
-  set pcolor scale-color blue algas 0 110
+  set pcolor scale-color blue algas 0 10
 end
 
 to eat ;;;extraido del modelo de vacas
   if algas >= (energia-del-algas)
   [
-  set energia energia + energia-del-algas
-  set algas algas - energia-del-algas
-  recolor-algas
+    set energia energia + energia-del-algas
+    set algas algas - energia-del-algas
+    recolor-algas
   ]
 end
 
 to starve
   if energia <= 0
-  [die
-  print "mori de inanicion"]
+  [
+    ;show "mori de inanicion"
+    die
+  ]
 
 end
 
@@ -140,25 +154,25 @@ ticks
 30.0
 
 SLIDER
-20
-104
-192
-137
+18
+175
+190
+208
 r
 r
 1
 10
-4.0
+1.0
 1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-36
-36
-99
-69
+41
+10
+104
+43
 NIL
 setup
 NIL
@@ -172,10 +186,10 @@ NIL
 1
 
 BUTTON
-112
-10
-175
-43
+40
+52
+103
+85
 NIL
 go
 NIL
@@ -200,15 +214,15 @@ count turtles
 11
 
 SLIDER
-18
-171
-190
-204
+16
+242
+188
+275
 pob-ini
 pob-ini
 0
 100
-1.0
+100.0
 1
 1
 NIL
@@ -221,7 +235,7 @@ MONITOR
 278
 Tortugas por parche
 max [count turtles-here] of patches
-17
+5
 1
 11
 
@@ -255,10 +269,10 @@ mean [age] of turtles
 11
 
 SLIDER
-20
-220
-192
-253
+18
+291
+190
+324
 max-age
 max-age
 0
@@ -274,32 +288,32 @@ MONITOR
 342
 887
 387
-NIL
+Mean tutles por parche
 mean [count turtles-here] of patches
-2
+4
 1
 11
 
 SLIDER
-996
-36
-1168
-69
+18
+390
+190
+423
 energia-del-algas
 energia-del-algas
 0
 10
-3.0
+5.0
 1
 1
 NIL
 HORIZONTAL
 
 MONITOR
-994
-81
-1190
-126
+672
+403
+868
+448
 Promedio de Energía de Tortugas
 mean [energia] of turtles
 2
@@ -307,10 +321,10 @@ mean [energia] of turtles
 11
 
 SWITCH
-1015
-136
-1162
-169
+15
+469
+162
+502
 facilitacion-algas
 facilitacion-algas
 1
@@ -318,25 +332,25 @@ facilitacion-algas
 -1000
 
 SLIDER
-1009
-186
-1183
-219
+15
+519
+207
+552
 tasa-crecimiento-algas
 tasa-crecimiento-algas
 0
 1
-0.5
+0.2
 0.1
 1
 NIL
 HORIZONTAL
 
 BUTTON
-103
-53
-195
-86
+43
+102
+135
+135
 go-forever
 go
 T
@@ -348,6 +362,32 @@ NIL
 NIL
 NIL
 1
+
+MONITOR
+674
+471
+847
+516
+NIL
+mean [algas] of patches
+4
+1
+11
+
+SLIDER
+19
+349
+191
+382
+gasto-energia
+gasto-energia
+0
+10
+1.0
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ###Modelo logistico basado en el individuo
