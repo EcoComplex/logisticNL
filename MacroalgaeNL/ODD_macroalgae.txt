@@ -1,1 +1,45 @@
-ODD PROTOCOL FOR ANTARCTIC MACROALGAE MODEL
+---##ODD PROTOCOL FOR ANTARCTIC MACROALGAE MODEL##---
+
+ELEMENTS OF THE ODD PROTOCOL
+
+#OVERVIEW
+
+1. Purpose and patterns
+
+2. Entities, state variables and scales
+
+3. Process overview and scheduling
+
+
+#DESIGN CONCEPTS
+
+4. Desing concepts
+    +Basic principles
+
+    +Emergence
+
+    +Adaptation
+
+    +Objectives
+
+    +Learning
+
+    +Prediction
+
+    +Sensing
+
+    +Interaction
+
+    +Stochasticity
+
+    +Collectives
+
+    +Observation
+
+#DETAILS
+
+5. Initialization
+
+6. Input data
+
+7. Submodels
