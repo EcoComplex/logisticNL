@@ -5,15 +5,20 @@ ELEMENTS OF THE ODD PROTOCOL
 #OVERVIEW
 
 1. Purpose and patterns
+Clear and concise statement of the question addressed by the model: what system are we modelling, and what we are trying to learn about it.
 
 2. Entities, state variables and scales
+Entities are the kinds of things represented in the model (agents and patches); state variables characterize the entities and specify the state of the model at any time; temporal and spatial scales include the temporal extent and time step size, and represent the variation over space and patches size.
 
 3. Process overview and scheduling
+A process change the state variable of the entities: what are the model entities doing? what behaviors do the agents execute? what updates and changes happen in their environment? Usually, processes (move, mating, etc) are described in the Submodel section. Scheduling is the order in which the processes are executed.
 
 
 #DESIGN CONCEPTS
 
 4. Desing concepts
+What general concepts, theories, hypothesis underlie the models’s design? What are the model results and outputs? What adaptive behaviors do agents have and why, do they learn from them? Do agents sense in order to modify its behavior? Agent’s interactions? Any collectives or aggregations of agents? Outputs and analyses to test the model.
+
     +Basic principles
 
     +Emergence
@@ -39,7 +44,11 @@ ELEMENTS OF THE ODD PROTOCOL
 #DETAILS
 
 5. Initialization
+Description of World set up, initial number of agents and values of state variables and environmental variables.
 
 6. Input data
+Data files that are read while the model is executed.
+
 
 7. Submodels
+Are models of one process, document what and why.
