@@ -1,0 +1,82 @@
+---##ODD PROTOCOL FOR ANTARCTIC MACROALGAE MODEL##---
+
+ELEMENTS OF THE ODD PROTOCOL
+
+#OVERVIEW
+
+1. Purpose and patterns
+Clear and concise statement of the question addressed by the model: what system are we modelling, and what we are trying to learn about it.
+
+Research question: Will macroalgae biomass increase or decrease due to Climate Change?
+Study area: Potter Cove (South Shetland Is.), Antarctica.
+
+2. Entities, state variables and scales
+Entities are the kinds of things represented in the model (agents and patches); state variables characterize the entities and specify the state of the model at any time; temporal and spatial scales include the temporal extent and time step size, and represent the variation over space and patches size.
+
+The main equation of the model describing macroalgae dynamics is:
+						B(t+1) = B(t) + umax * L(t) * Temp(t) * B(t) - g * B(t) - m(t)
+
+where B is macroalgae biomass, umax is maximum intrinsic growth rate, L and Temp are light and temperature effects on growth, g is grazing rate and m is mortality due to ice erosion.
+Considering that the irradiance levels that reach the sea bottom are mediated by depth, suspended sediments and incident radiation, the model takes into account the high variability of 
+incident light and turbidity, two factors with high seasonal fluctuations in Antarctica.
+
+3. Process overview and scheduling
+A process change the state variable of the entities: what are the model entities doing? what behaviors do the agents execute? what updates and changes happen in their environment? Usually, processes (move, mating, etc) are described in the Submodel section. Scheduling is the order in which the processes are executed.
+
+
+#DESIGN CONCEPTS
+
+4. Design concepts
+What general concepts, theories, hypothesis underlie the models’s design? What are the model results and outputs? What adaptive behaviors do agents have and why, do they learn from them? Do agents sense in order to modify its behavior? Agent’s interactions? Any collectives or aggregations of agents? Outputs and analyses to test the model.
+
+    +Basic principles
+	
+	Assumptions of the model:
+		- No growth limitation due to nutrients;
+		- Growth is only possible when the area is free of ice.
+
+	Hypotheses:
+		- Inter-annual variability in ice cover does not produce a significant effect on the primary productivity;
+		- In some areas the effect of decreased ice cover has a positive by increasing growth period and substrate availability for colonization;
+		- In some areas the effect of glaciar melting has a negative effect caused by an increase in suspended sediments affecting light availability;
+		- The net effect of climate change on the net primary production / biomass ratio is positive.
+
+    +Emergence
+
+    +Adaptation
+
+    +Objectives
+
+    +Learning
+
+    +Prediction
+
+    +Sensing
+
+    +Interaction
+
+    +Stochasticity
+
+    +Collectives
+
+    +Observation
+
+#DETAILS
+
+5. Initialization
+Description of World set up, initial number of agents and values of state variables and environmental variables.
+
+Macroalgae biomass data was obtained from surveys done in Potter Cove (South Shetland Is., Antarctica) during 1991-96 and 2007-08.
+Parameter values (i.e. growth rate) were extracted from previous studies performed in the Antarctic Peninsula.
+
+6. Input data
+Data files that are read while the model is executed.
+
+The following environmental data was used to run the model:
+				- Water temperature and salinity, from CTDs launches performed during the mentioned period;
+				- Photosynthetically Active Radiation (PAR), from LI-1400 DataLogger;
+				- Sea ice (extension and duration), from satellite images (repository doi.pangaea.de);
+				- Meteorological variables (air temperature, wind, precipitation), from Carlini Base meteorological station.
+
+7. Submodels
+Are models of one process, document what and why.
