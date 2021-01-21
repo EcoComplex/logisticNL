@@ -7,12 +7,20 @@ ELEMENTS OF THE ODD PROTOCOL
 1. Purpose and patterns
 Clear and concise statement of the question addressed by the model: what system are we modelling, and what we are trying to learn about it.
 
+    The purpose of the model is to study the dynamics of Potter Cove's antarctic macroalgae. It's also desirable to extend this model to other antarctic habitats 
+    We trying to leanr from this model if the macroalgae's biomass will increase or decrease with climate change having in consideration the temporal and spatial 
+    scale of temperature raising, ice coverage and the sediment load
+
 2. Entities, state variables and scales
 Entities are the kinds of things represented in the model (agents and patches); state variables characterize the entities and specify the state of the model at any time; temporal and spatial scales include the temporal extent and time step size, and represent the variation over space and patches size.
+
+    The entities of this models are the macroalge (agents) and the habitat and its chracteristics. 
+    Probably we should implement to breeds of agents: one for annual macroalgae and other for perennial macroalgae
 
 3. Process overview and scheduling
 A process change the state variable of the entities: what are the model entities doing? what behaviors do the agents execute? what updates and changes happen in their environment? Usually, processes (move, mating, etc) are described in the Submodel section. Scheduling is the order in which the processes are executed.
 
+    The main state variable is biomass, so the processes that have incidence in that state variable are temperature, light, growth rate, mortality and biomass from the previous year
 
 #DESIGN CONCEPTS
 
@@ -21,16 +29,52 @@ What general concepts, theories, hypothesis underlie the models’s design? What
 
     +Basic principles
 
+        B(t + 1) = B(t) + μmax Λ(t) Γ(t) B(t) - D(t) B(t) - M(t)
+
+            B(t) = macroalgae biomass at time t;
+            μmax = the maximum intrinsic growth rate;
+            Λ(t); Γ(t) = effects of light and temperature on growth (respectively)
+         D(t); M(t) = biomass-dependent mortality rates associated with herbivory and ice erosion (respectively)
+
+        ** The only assumption that the model has is that nutrients are not limitant and that light, temperature and ice disturbance should be considered as the only environmental variables
+
+        ##Hypothesis:
+
+        a. The greater inter-annual variability in ice cover does not produce a significant effect on the
+            primary productivity.
+
+        b. In some areas the effect of decreased ice cover has a positive influence on the
+            primary production. This change produces an increase in the growth period of the
+            macroalgae and in the area available for colonization.
+
+        c. In some areas the effect of global warming produces a lower primary production in the
+            Caleta as the melting of ice causes an increase in suspended sediments
+            affecting light availability for macroalgae
+
+        d. The total effect of climate change on the net primary production / biomass of macroalgae
+            Antarctic will be positive.
+
     +Emergence
 
     +Adaptation
 
     +Objectives
 
+        a. Estimate the primary production of Antarctic macroalgae for Potter Cove through the
+            mathematical models.
+        b. Evaluate the effect of inter-annual variability in ice cover on the primary production of
+            macroalgae.
+        c. Study the effect of the decrease in ice cover on the primary production of the
+            macroalgae related to the increase in the area available for colonization.
+        d. Evaluate the effects of less light due to sediment from melting of the
+            glacier as a consequence of global warming.
+        e. Evaluate global change scenarios and estimate possible impacts on Antarctic macroalgae
+
     +Learning
 
     +Prediction
-
+         The macroalgae biomass will increase with climate change due to the newly ice-free areas and changes to a autotrophic food web and an expansion in the distribution con the macroalgae community
+    
     +Sensing
 
     +Interaction
@@ -46,9 +90,19 @@ What general concepts, theories, hypothesis underlie the models’s design? What
 5. Initialization
 Description of World set up, initial number of agents and values of state variables and environmental variables.
 
+    Macroalgae biomass and coverage percetage (convert to biomass) that were obtain in Potter Cove sampling across 12 stations during 1991-1996 and 2007-2008
+    Bibliography data
+
 6. Input data
 Data files that are read while the model is executed.
 
+    1) water temperature and salinity measurements of sea (CTD Sea-Bird, SBE19plus, United States) 
+    2) Instantaneous surface measurements photosynthetically active light (PAR) through one Li-Cor 1400 Datalogger lux meter of two sensors (surface and submersible) (Biosciences, United States) 
+    3) Extension information and duration of sea ice using photographic images
+    4) meteorological variables, air temperature, winds, precipitation (Weather station of the National Meteorological Service, Carlini Base)
 
 7. Submodels
-Are models of one process, document what and why.
+Are models of one process, document what and why. "We often treat processes as submodels"
+    Submodels for (?)
+     -  mortality 
+     - growth
