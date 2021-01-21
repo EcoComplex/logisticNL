@@ -1,0 +1,69 @@
+# ANTARCTIC MACROALGAE MODEL ODD DESCRIPTION
+
+## 1. Purpose and patterns
+_Clear and concise statement of the question addressed by the model: what system are we modelling, and what we are trying to learn about it_
+
+The model was designed to explore and describe Potter Cove, West Antarctic Peninsula macroalgae dynamics.
+In particular, we wanted to answer the question: what is the effect of climate change (temperature rising, reduction in sea ice cover and increment of particulated organic matter/sediment input) on macroalgae biomass?
+
+## 2. Entities, state variables and scales
+_Entities are the kinds of things represented in the model (agents and patches); state variables characterize the entities and specify the state of the model at any time; temporal and spatial scales include the temporal extent and time step size, and represent the variation over space and patches size._
+
+The model has two kind of entities: macroalgae and patches representing habitat and its characteristics.
+
+## 3. Process overview and scheduling
+_A process change the state variable of the entities: what are the model entities doing? what behaviors do the agents execute? what updates and changes happen in their environment? Usually, processes (move, mating, etc) are described in the Submodel section. Scheduling is the order in which the processes are executed._
+
+## 4. Desing concepts
+_What general concepts, theories, hypothesis underlie the models’s design? What are the model results and outputs? What adaptive behaviors do agents have and why, do they learn from them? Do agents sense in order to modify its behavior? Agent’s interactions? Any collectives or aggregations of agents? Outputs and analyses to test the model._
+
+* Basic principles
+
+This model was formulated according the following mathematical ecuation:
+
+B(t + 1) = B(t) + μmax Λ(t) Γ(t) B(t) - D(t) B(t) - M(t)
+
+Where B(t) is macroalgae biomass at time t;
+μmax is the maximum intrinsic growth rate;
+Λ(t) and Γ(t) represent the effects of light and temperature on growth, respectively;
+and D(t) and M(t) are the biomass-dependent mortality rates associated with herbivory and ice erosion, respectively.
+
+Model assumptions:
+- Nutrients are not a limiting factor for macroalgae growth.
+
+Model hypothesis:
+- Ice cover inter-annual variability does not produce a significant effect on macroalgae productivity.
+- In some areas, decreased ice cover has a positive influence on primary production by increasing macroalgae growth period and availability of free areas for colonization.
+- In some areas, global warming decreases primary production by increasing glaciar meltwater with sediments into the water column, affecting light availability for macroalgae growth.
+- The total effect of climate change on the net primary production/biomass of macroalgae will be positive.
+
+* Emergence
+* Adaptation
+* Objectives
+* Learning
+* Prediction
+* Sensing
+* Interaction
+* Stochasticity
+* Collectives
+* Observation
+
+## 5. Initialization
+_Description of World set up, initial number of agents and values of state variables and environmental variables._
+
+Macroalgae biomass samplings data, obtained in Potter Cove in 1991-96 and 2007-08.
+Growht rate were obtained bibliographically from previous studies.
+
+## 6. Input data
+_Data files that are read while the model is executed._
+
+Enviromental data:
+- Water temperature and salinity (CTD Sea-Bird, SBE19plus, United
+States)
+- Photosynthetically active light (PAR) (Li-Cor 1400 Datalogger lux meter, Biosciences,
+United States)
+- Sea icea extention and duration (photographic images doi.pangaea.de/10.1594/PANGAEA.912115) 
+- Meteorological variables, air temperature, winds and precipitation (National Meteorological Service Weather Station, Carlini Base)
+
+## 7. Submodels
+_Are models of one process, document what and why._
