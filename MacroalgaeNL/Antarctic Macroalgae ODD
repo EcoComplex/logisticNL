@@ -1,0 +1,152 @@
+---##ODD PROTOCOL FOR ANTARCTIC MACROALGAE MODEL##---
+
+ELEMENTS OF THE ODD PROTOCOL
+
+#OVERVIEW
+
+1. Purpose and patterns
+
+	The purpose of this model is to study the dynamics of antarctic macroalgae in a general antarctic habitat. 
+	We also want to especialize this model to the  case of Potter Cove, South Shetland Islands, Antarctica.
+	The principal pattern that rules these dynamics is the climate change and its effects on the temporal and spatial scales of: 
+	temperature, ice coverage and the sediment load. Abundance and diversity are expected to be inversely proportional to melting disturbances; 
+	a decline in ice coverage leads to free substratum for colonization, improving growth; melting process increases the suspended soils concentration and declines
+	light incidence, leading to a loss of biomass. 
+	In particular, we wanted to answer the question: what is the effect of climate change (temperature rising, reduction in sea ice cover and 
+	increment of particulated organic matter/sediment input) on macroalgae biomass?
+	
+		###Goals
+
+        b. Evaluate the effect of inter-annual variability in ice cover on the primary production/biomass of
+            macroalgae.
+        c. Study the effect of the decrease in ice cover on the primary production of the
+            macroalgae related to the increase in the area available for colonization.
+        d. Evaluate the effects of less light due to sediment from melting of the
+            glacier as a consequence of global warming.
+        e. Evaluate global change scenarios and estimate possible impacts on Antarctic macroalgae
+
+2. Entities, state variables and scales
+
+	The model has two kind of entities: macroalgae and patches representing habitat and its characteristics(availability, hardness, temperature, ice coverage, sediments concentration, light incidence).
+	We also implement two breeds of agents: one for annual macroalgae and other for perennial macroalgae
+	The environment also has its characteristics: type, size, slope, length, location
+	The temporal scale is yearly, and every t in the model will represent the summer season, when biomass data is collected.
+	The spatial scale when is real is a defined dimension and when its virtual, 25x25 will be the resolution that we will work on
+
+3. Process overview and scheduling
+
+	The main state variable is biomass, so the processes that have incidence in that state variable are temperature, light, growth rate, mortality and biomass 
+	from the previous year (if the agents are from the perennial breed)
+	The agents (macroalgae) will have the following behaviour: grow, reproduce and die from grazing, ice breakage or because they completed theire cycle (annuals). 
+	The main characteristic of the patches (substratum) will be: availability, hardness, temperature, ice coverage, sediments concentration, light incidence
+
+## 4. Desing concepts
+
+
+	+Basic principles
+	
+				B(t + 1) = B(t) + μmax Λ(t) Γ(t) B(t) - D(t) B(t) - M(t)
+
+            B(t) = macroalgae biomass at time t;
+            μmax = the maximum intrinsic growth rate;
+            Λ(t); Γ(t) = effects of light and temperature on growth (respectively)
+			(t); M(t) = biomass-dependent mortality rates associated with herbivory and ice erosion (respectively)
+
+        ** The only assumption that the model has is that nutrients are not limitant and that light, 
+		temperature and ice disturbance should be considered as the only environmental variables
+		
+		**To consider availability of patches we will stablish a limited amount of agents per patch. If there is more agents above that limit,
+		the competition effects on light availability and resources has to be considered in a new model.
+
+        ##Hypothesis:
+
+        a. The greater inter-annual variability in ice cover does not produce a significant effect on the
+            primary productivity.
+
+        b. In some areas the effect of decreased ice cover has a positive influence on the
+            primary production. This change produces an increase in the growth period of the
+            macroalgae and in the area available for colonization.
+
+        c. In some areas the effect of global warming produces a lower primary production 
+			as the melting of ice causes an increase in suspended sediments
+            affecting light availability for macroalgae
+
+        d. The total effect of climate change on the net primary production / biomass of macroalgae
+            Antarctic will be positive.
+			
+		##Prediction:
+	
+     P1. The macroalgae biomass will increase with climate change due to the newly ice-free areas and changes to an autotrophic 
+		 food web and an expansion in the distribution on the macroalgae community
+		 
+		 P2. The macroalgae biomass will decrease with climate change due to ice scouring and its direct effect on the community and the increase of suspendended
+		 sediments in the water column, increasing the turbity. Turbidity can also have and effect on the overlapping the vertical distribution of the macroalgae,
+		 producing competition (BUT let's remember that in this model we are not considering the effects of competition over biomass production)
+			
+	+Emergence:
+	
+		The most important output of the model will be the change in biomass over time due to the climate change effects
+		What happens with the dynamics under different conditions of temperature, ice coverage and sediments concentration. 
+	
+	+Adaptation: 
+	
+		The way agents respond to the changes in the environment will be reflected in the biomass produce at t+1. If the conditions of the environment (substratum availability, temperature, etc)
+		are beneficial, it it will appear reflected in the biomass at t+1
+
+	+Objectives
+	
+		The agents don't have an adaptative behaviour
+	
+	+ Learning
+	
+		The agents don't have the capacity to learn because they are macroalgae
+	
+	+ Prediction
+		
+		In this model agents don't predict future conditions, they can only react to the present one and show the response at t+1
+
+    +Interaction
+	
+		We will not consider competition between agents in this model. We will stablish a maximun capacity of agents per patch to avoid the effects of competition
+		on growth and reproduction
+
+    +Stochasticity
+		
+		We can introduce stochasticity in this model by including some abnormal years (ticks) in the form of a periodic function.
+
+    +Collectives
+		
+		There is not collective behaviour in this type of agents
+		
+    +Observation
+	
+		The main output of the model is biomass
+	
+5. Initialization
+	
+	The initial values of all the state variables: Macroalgae biomass samplings data
+	Growth rate obtained bibliographically from previous studies.	
+	If we aim to do a general model we can implement a range for temperature in a slider form and fix a starting point for that variable	
+	
+6. Input data
+	
+	Data files that are read while the model is executed._
+
+	Enviromental data:
+		- Water temperature  
+		- Photosynthetically active light (PAR) 
+		- Sea icea extention and duration 
+		- Meteorological variables, air temperature, winds and precipitation 
+		
+7. Submodels
+	
+	Initially, we propose one submodel for every term in the model equation:
+				
+		Submodel 1 -> Term for starting biomass( biomass from the previous year);  For annual type agents, this term will be zero. 
+					      For perennial agents we will consider the biomass at t-1
+									
+		Submodel 2 -> Term for growth of macroalgae; μmax Λ(t) Γ(t) B(t): The growth will depend on the growth rate, light availability and temperature
+				
+		Submodel 3 -> Term for mortality of macroalgae; the mortality will depend on grazing, ice scouring or natural death (life cycle completed). 
+				
+		Submodel 4 -> Model for reproduction and propangle scattering
