@@ -5,7 +5,10 @@ perennials-own[
   p-biomass
   age
 ]
-annuals-own[a-biomass]
+annuals-own[
+  a-biomass
+  age
+  ]
 
 to setup
   clear-all
@@ -21,13 +24,27 @@ to setup
     set shape "plant"
     setxy random-pxcor random-pycor
     set a-biomass random annual-biomass
+    set age 0
   ]
   reset-ticks
 end
 
 to go
-  ask perennials[p-growth]
-  ask annuals[a-growth]
+   ask turtles[
+    not-compete
+  ]
+  ask perennials[
+    p-reproduce
+    p-growth
+  ]
+  ask annuals[
+    a-reproduce
+    a-growth
+
+  ]
+    ask turtles[
+    not-compete
+  ]
   ;;reproduction
   ;;ice-breakage
   ;;grazing
@@ -44,13 +61,43 @@ end
 to p-growth
   set p-biomass p-biomass + int-growth-rate * temperature * light
   set age age + 1
+  if age >= 5 [
+    die
+  ]
+end
 
+to p-reproduce
+  hatch random 5 [
+  set p-biomass random 30
+  set color blue
+  fd random 3
+  rt random 360
+  set age 0
+  ]
 end
 
 to a-growth
     set a-biomass 0 + int-growth-rate * temperature * light
+  set age age + 1
+  if age >= 1 [
+    die
+  ]
 end
 
+to a-reproduce
+  hatch random 5 [
+  set a-biomass random 30
+  set color green
+  fd random 3
+  rt random 360
+  set age 0
+  ]
+  die
+end
+
+to not-compete
+  ask turtles with [count turtles-here > 5] [ die ]
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -184,7 +231,7 @@ annual-biomass
 annual-biomass
 20
 200
-115.0
+112.0
 1
 1
 NIL
@@ -234,6 +281,39 @@ light
 1
 NIL
 HORIZONTAL
+
+MONITOR
+903
+13
+1062
+58
+perennial biomass watcher
+mean [p-biomass] of perennials
+2
+1
+11
+
+MONITOR
+906
+64
+1057
+109
+annuals biomass watcher
+mean [a-biomass] of annuals
+2
+1
+11
+
+MONITOR
+904
+119
+1030
+164
+Max algae per patch
+max [count turtles-here] of patches
+0
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
