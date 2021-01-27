@@ -1,6 +1,6 @@
 breed [perennials a-perennial]
 breed [annuals a-annual]
-
+patches-own[elevation]
 perennials-own[
   p-biomass
   age
@@ -12,6 +12,21 @@ annuals-own[
 
 to setup
   clear-all
+  resize-world 0 51 0 51
+  file-open "bathymetry.txt" while [not file-at-end?]
+  [
+    let next-X file-read
+    let next-Y file-read
+    let next-elevation file-read
+    ask patch next-X next-Y [set elevation next-elevation]
+  ]
+  file-close
+
+  let min-elevation min [elevation] of patches
+  let max-elevation max [elevation] of patches
+  ask patches [
+    set pcolor scale-color turquoise elevation min-elevation max-elevation
+  ]
   create-perennials perennials-ind [
     set color blue
     set shape "plant"
@@ -102,8 +117,8 @@ end
 GRAPHICS-WINDOW
 210
 10
-881
-682
+894
+695
 -1
 -1
 13.0
@@ -116,10 +131,10 @@ GRAPHICS-WINDOW
 1
 1
 1
--25
-25
--25
-25
+0
+51
+0
+51
 0
 0
 1
@@ -201,7 +216,7 @@ annuals-ind
 annuals-ind
 0
 100
-50.0
+41.0
 1
 1
 NIL
@@ -216,7 +231,7 @@ perennial-biomass
 perennial-biomass
 20
 200
-56.0
+60.0
 1
 1
 NIL
@@ -231,7 +246,7 @@ annual-biomass
 annual-biomass
 20
 200
-112.0
+120.0
 1
 1
 NIL
