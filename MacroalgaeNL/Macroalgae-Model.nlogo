@@ -1,6 +1,9 @@
 breed [perennials a-perennial]
 breed [annuals a-annual]
-patches-own[elevation]
+patches-own[
+  depth
+]
+
 perennials-own[
   p-biomass
   age
@@ -8,24 +11,24 @@ perennials-own[
 annuals-own[
   a-biomass
   age
-  ]
+]
 
 to setup
   clear-all
-  resize-world 0 51 0 51
+  resize-world 0 50 0 51
   file-open "bathymetry.txt" while [not file-at-end?]
   [
     let next-X file-read
     let next-Y file-read
-    let next-elevation file-read
-    ask patch next-X next-Y [set elevation next-elevation]
+    let next-depth file-read
+    ask patch next-X next-Y [set depth next-depth]
   ]
   file-close
 
-  let min-elevation min [elevation] of patches
-  let max-elevation max [elevation] of patches
+  let min-depth min [depth] of patches
+  let max-depth max [depth] of patches
   ask patches [
-    set pcolor scale-color turquoise elevation min-elevation max-elevation
+    set pcolor scale-color turquoise depth min-depth max-depth
   ]
   create-perennials perennials-ind [
     set color blue
@@ -113,26 +116,28 @@ end
 to not-compete
   ask turtles with [count turtles-here > 5] [ die ]
 end
+
+
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
 10
-894
-695
+669
+478
 -1
 -1
-13.0
+8.84314
 1
 10
 1
 1
 1
 0
-1
-1
+0
+0
 1
 0
-51
+50
 0
 51
 0
@@ -231,7 +236,7 @@ perennial-biomass
 perennial-biomass
 20
 200
-60.0
+64.0
 1
 1
 NIL
@@ -246,7 +251,7 @@ annual-biomass
 annual-biomass
 20
 200
-120.0
+127.0
 1
 1
 NIL
@@ -261,7 +266,7 @@ int-growth-rate
 int-growth-rate
 0
 1
-1.0
+0.8
 0.1
 1
 NIL
@@ -298,37 +303,91 @@ NIL
 HORIZONTAL
 
 MONITOR
-903
-13
-1062
-58
-perennial biomass watcher
+689
+20
+882
+65
+perennial mean biomass watcher
 mean [p-biomass] of perennials
 2
 1
 11
 
 MONITOR
-906
-64
-1057
-109
-annuals biomass watcher
+888
+18
+1073
+63
+annuals mean biomass watcher
 mean [a-biomass] of annuals
 2
 1
 11
 
 MONITOR
-904
-119
-1030
-164
+691
+72
+817
+117
 Max algae per patch
 max [count turtles-here] of patches
 0
 1
 11
+
+PLOT
+725
+124
+998
+316
+Turtles Count
+NIL
+NIL
+0.0
+15.0
+0.0
+1000.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -16777216 true "" "plot count turtles"
+
+PLOT
+679
+323
+868
+446
+Perennials count
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -14454117 true "" "plot count perennials"
+
+PLOT
+876
+325
+1065
+446
+Annuals count
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+"" ""
+PENS
+"default" 1.0 0 -14439633 true "" "plot count annuals"
 
 @#$#@#$#@
 ## WHAT IS IT?
