@@ -249,7 +249,7 @@ annuals-ind
 annuals-ind
 0
 100
-50.0
+48.0
 1
 1
 NIL
@@ -264,7 +264,7 @@ perennial-biomass
 perennial-biomass
 20
 200
-100.0
+99.0
 1
 1
 NIL
@@ -279,7 +279,7 @@ annual-biomass
 annual-biomass
 20
 200
-100.0
+92.0
 1
 1
 NIL
