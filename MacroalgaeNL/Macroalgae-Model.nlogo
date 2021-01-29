@@ -1,5 +1,11 @@
 breed [perennials a-perennial]
 breed [annuals a-annual]
+
+globals[
+  grazing
+  ice
+]
+
 patches-own[
   depth
 ]
@@ -28,7 +34,7 @@ to setup
   let min-depth min [depth] of patches
   let max-depth max [depth] of patches
   ask patches [
-    set pcolor scale-color turquoise depth min-depth max-depth
+  set pcolor scale-color turquoise depth max-depth min-depth
   ]
   create-perennials perennials-ind [
     set color blue
@@ -44,6 +50,7 @@ to setup
     set a-biomass random annual-biomass
     set age 0
   ]
+  set grazing grazing-rate
   reset-ticks
 end
 
@@ -54,22 +61,19 @@ to go
   ask perennials[
     p-reproduce
     p-growth
+    p-graze-die
   ]
   ask annuals[
     a-reproduce
     a-growth
+    a-graze-die
 
   ]
     ask turtles[
     not-compete
   ]
-  ;;reproduction
   ;;ice-breakage
   ;;grazing
-  ;;sprout
-  ;;p-aging
-  ;;a-naturaldeath
-  ;;die (p-aging a-naturaldeath)
   ;;bathimetry
   tick
 end
@@ -77,16 +81,17 @@ end
 ;B(t + 1) = B(t) + μmax Λ(t) Γ(t) B(t) - D(t) B(t) - M(t)
 
 to p-growth
-  set p-biomass p-biomass + int-growth-rate * temperature * light
+  set p-biomass p-biomass + int-growth-rate * temperature * (1 / depth)
   set age age + 1
   if age >= 5 [
     die
   ]
+
 end
 
 to p-reproduce
   hatch random 5 [
-  set p-biomass random 30
+  set p-biomass random 30 + 1
   set color blue
   fd random 3
   rt random 360
@@ -95,7 +100,7 @@ to p-reproduce
 end
 
 to a-growth
-    set a-biomass 0 + int-growth-rate * temperature * light
+   set a-biomass 0 + int-growth-rate * temperature  * (1 / depth)
   set age age + 1
   if age >= 1 [
     die
@@ -104,7 +109,7 @@ end
 
 to a-reproduce
   hatch random 5 [
-  set a-biomass random 30
+  set a-biomass random 30 + 1
   set color green
   fd random 3
   rt random 360
@@ -114,7 +119,30 @@ to a-reproduce
 end
 
 to not-compete
-  ask turtles with [count turtles-here > 5] [ die ]
+  ask turtles with [count turtles-here > 5] [
+    die ]
+end
+
+to p-graze-die
+  set p-biomass p-biomass - grazing * depth * p-biomass
+    if p-biomass <= 0 [
+    die
+  ]
+end
+
+to a-graze-die
+  set a-biomass a-biomass - grazing * depth * a-biomass
+    if a-biomass <= 0 [
+    die
+  ]
+end
+
+to p-ice-die
+
+end
+
+to a-ice-die
+
 end
 
 
@@ -147,10 +175,10 @@ ticks
 30.0
 
 BUTTON
-33
-39
-96
-72
+55
+10
+118
+43
 NIL
 setup
 NIL
@@ -164,10 +192,10 @@ NIL
 1
 
 BUTTON
-37
-85
-100
-118
+59
+56
+122
+89
 NIL
 go
 NIL
@@ -181,10 +209,10 @@ NIL
 1
 
 BUTTON
-27
-127
-117
-160
+49
+98
+139
+131
 go forever
 go 
 T
@@ -198,10 +226,10 @@ NIL
 1
 
 SLIDER
-12
-176
-184
-209
+8
+144
+180
+177
 perennials-ind
 perennials-ind
 0
@@ -213,55 +241,55 @@ NIL
 HORIZONTAL
 
 SLIDER
-12
-215
-184
-248
+8
+183
+180
+216
 annuals-ind
 annuals-ind
 0
 100
-41.0
+50.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-13
-261
-185
-294
+9
+230
+181
+263
 perennial-biomass
 perennial-biomass
 20
 200
-64.0
+100.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-15
-300
-187
-333
+10
+268
+182
+301
 annual-biomass
 annual-biomass
 20
 200
-127.0
+100.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-16
-347
-188
-380
+11
+315
+183
+348
 int-growth-rate
 int-growth-rate
 0
@@ -273,25 +301,25 @@ NIL
 HORIZONTAL
 
 SLIDER
-17
-391
-189
-424
+12
+360
+195
+394
 temperature
 temperature
--10
-10
-10.0
+14
+50
+14.0
 0.5
 1
-NIL
+farenheit
 HORIZONTAL
 
 SLIDER
-17
-436
-189
-469
+12
+404
+184
+437
 light
 light
 0
@@ -372,10 +400,10 @@ PENS
 "default" 1.0 0 -14454117 true "" "plot count perennials"
 
 PLOT
-876
-325
-1065
-446
+879
+324
+1067
+448
 Annuals count
 NIL
 NIL
@@ -388,6 +416,32 @@ false
 "" ""
 PENS
 "default" 1.0 0 -14439633 true "" "plot count annuals"
+
+SLIDER
+10
+444
+183
+478
+grazing-rate
+grazing-rate
+0
+1
+0.5
+0.1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+836
+71
+1008
+116
+NIL
+min[p-biomass] of perennials
+17
+1
+11
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -409,6 +463,10 @@ PENS
 ## THINGS TO TRY
 
 (suggested things for the user to try to do (move sliders, switches, etc.) with the model)
+
+;; Parches -> biomasa acumulada en el parche
+;; biomasa minima para reproducción
+;;(1 / depth) efecto de la luz y la batimetría
 
 ## EXTENDING THE MODEL
 
