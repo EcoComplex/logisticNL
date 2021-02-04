@@ -43,6 +43,7 @@ to setup
   create-perennials perennials-ind [
     set color blue
     set shape "plant"
+    set heading 90
     setxy random-pxcor random-pycor
     set p-biomass random perennial-biomass
     set age random 5
@@ -51,6 +52,7 @@ to setup
   create-annuals annuals-ind [
     set color green
     set shape "plant"
+    set heading 270
     setxy random-pxcor random-pycor
     set a-biomass random annual-biomass
     set age 0
@@ -69,14 +71,14 @@ to go
   ask perennials[
     p-reproduce
     p-growth
-    ;p-ice-die
-    ;p-graze-die
+    p-ice-die
+    p-graze-die
   ]
   ask annuals[
    a-reproduce
     a-growth
-    ;a-ice-die
-    ;a-graze-die
+    a-ice-die
+    a-graze-die
 
   ]
     ask turtles[
@@ -91,6 +93,7 @@ to p-growth
   set p-biomass p-biomass + int-growth-rate * temperature * (1 / depth)
   set age age + 1
   if age >= 5 [
+    ;show "me mori de vieje"
     die
   ]
 
@@ -101,8 +104,15 @@ to p-reproduce
   set p-biomass random 30 + 1
   set shape "circle"
   set color blue
-  colonize
+  set size p-biomass / max [p-biomass] of perennials
   set age 0
+  set heading 90
+  ifelse hardness > max [hardness] of neighbors
+    [stop]
+    [
+  rt random 180
+  fd random 8
+    ]
   ]
 end
 
@@ -110,6 +120,7 @@ to a-growth
    set a-biomass 0 + int-growth-rate * temperature  * (1 / depth)
   set age age + 1
   if age >= 1 [
+    ;show "me mori de vieje"
     die
   ]
 end
@@ -119,23 +130,30 @@ to a-reproduce
   set a-biomass random 30 + 1
   set shape "circle"
   set color green
-  fd 3
-  rt 360
-  colonize
+  set size a-biomass / max [a-biomass] of annuals
+  set heading 270
+  ifelse hardness < max [hardness] of neighbors
+    [stop]
+    [
+  rt random 180
+  fd random 8
+    ]
   set age 0
-
   ]
+  ;show "cumpli mi ciclo de vida"
   die
 end
 
 to not-compete
   ask turtles with [count turtles-here > 5] [
+    ;show "mori por competencia"
     die ]
 end
 
 to p-graze-die
   set p-biomass p-biomass - grazing * depth * p-biomass
     if p-biomass <= 0 [
+    ;show "mori por herbivoría"
     die
   ]
 end
@@ -143,27 +161,26 @@ end
 to a-graze-die
   set a-biomass a-biomass - grazing * depth * a-biomass
     if a-biomass <= 0 [
+    ;show "mori por herbivoría"
     die
   ]
 end
 
 to p-ice-die
   set p-biomass p-biomass - (mean [p-biomass] of perennials * ice) * (1 / depth)
+     if p-biomass <= 0 [
+    ;show "mori aplastado por hielo"
+    die]
 end
 
 to a-ice-die
   set a-biomass a-biomass - (mean [a-biomass] of annuals * ice) * (1 / depth)
+     if a-biomass <= 0 [
+    ;show "mori aplastado por hielo"
+    die]
 end
 
 
-to colonize
-   if hardness >= max [hardness] of neighbors
-    [stop]
-  ifelse random-float 1 < q
-
-  [downhill hardness]
-  [move-to one-of neighbors]
-end
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
@@ -235,7 +252,7 @@ perennials-ind
 perennials-ind
 0
 100
-20.0
+10.0
 1
 1
 NIL
@@ -250,7 +267,7 @@ annuals-ind
 annuals-ind
 0
 100
-20.0
+10.0
 1
 1
 NIL
@@ -264,9 +281,9 @@ SLIDER
 perennial-biomass
 perennial-biomass
 20
-200
-109.0
-1
+2000
+900.0
+10
 1
 NIL
 HORIZONTAL
@@ -279,9 +296,9 @@ SLIDER
 annual-biomass
 annual-biomass
 20
-200
-89.0
-1
+2000
+900.0
+10
 1
 NIL
 HORIZONTAL
@@ -295,7 +312,7 @@ int-growth-rate
 int-growth-rate
 0
 1
-0.8
+1.0
 0.1
 1
 NIL
@@ -412,7 +429,7 @@ grazing-rate
 grazing-rate
 0
 1
-0.5
+0.0
 0.1
 1
 NIL
@@ -438,7 +455,7 @@ ice-breakage
 ice-breakage
 0
 1
-0.7
+0.9
 0.1
 1
 NIL
@@ -453,25 +470,25 @@ q-rate
 q-rate
 0
 1
-0.0
+0.5
 0.1
 1
 NIL
 HORIZONTAL
 
 PLOT
-1081
-66
-1390
-340
+1016
+99
+1286
+310
 Macroalgae biomass at depth
 Depth
 Species
 0.0
 25.0
 0.0
-200.0
-false
+3000.0
+true
 true
 "set-plot-x-range 0 25\nset-plot-y-range 0 200\n;((sum [p-biomass] of perennials) + (sum [a-biomass] of annuals)) / 8" ""
 PENS
