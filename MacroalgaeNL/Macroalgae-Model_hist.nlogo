@@ -4,7 +4,6 @@ breed [annuals a-annual]
 globals[
   grazing
   ice
-  q
 ]
 
 patches-own[
@@ -60,7 +59,6 @@ to setup
   ]
   set grazing grazing-rate
   set ice ice-breakage
-  set q q-rate
   reset-ticks
 end
 
@@ -180,16 +178,15 @@ to a-ice-die
     die]
 end
 
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
 10
-669
-478
+648
+457
 -1
 -1
-8.84314
+9.275
 1
 10
 1
@@ -244,10 +241,10 @@ NIL
 1
 
 SLIDER
-8
-144
-180
-177
+17
+94
+189
+127
 perennials-ind
 perennials-ind
 0
@@ -259,10 +256,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-8
-183
-180
-216
+17
+133
+189
+166
 annuals-ind
 annuals-ind
 0
@@ -274,10 +271,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-9
-230
-181
-263
+18
+180
+190
+213
 perennial-biomass
 perennial-biomass
 20
@@ -289,10 +286,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-10
-268
-182
-301
+19
+218
+191
+251
 annual-biomass
 annual-biomass
 20
@@ -304,25 +301,25 @@ NIL
 HORIZONTAL
 
 SLIDER
-11
-315
-183
-348
+20
+265
+192
+298
 int-growth-rate
 int-growth-rate
 0
 1
-1.0
+0.5
 0.1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-12
-360
-195
-393
+21
+310
+204
+343
 temperature
 temperature
 14
@@ -421,15 +418,15 @@ PENS
 "default" 1.0 0 -14439633 true "" "plot count annuals"
 
 SLIDER
-16
-400
-189
-433
+25
+350
+198
+383
 grazing-rate
 grazing-rate
 0
 1
-0.0
+0.5
 0.1
 1
 NIL
@@ -447,27 +444,12 @@ min[p-biomass] of perennials
 11
 
 SLIDER
-18
-439
-190
-472
+27
+389
+199
+422
 ice-breakage
 ice-breakage
-0
-1
-0.9
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-8
-101
-181
-134
-q-rate
-q-rate
 0
 1
 0.5
@@ -477,20 +459,20 @@ NIL
 HORIZONTAL
 
 PLOT
-1016
-99
-1286
-310
+1009
+128
+1264
+318
 Macroalgae biomass at depth
 Depth
 Species
 0.0
-25.0
+50.0
 0.0
 3000.0
 true
 true
-"set-plot-x-range 0 25\nset-plot-y-range 0 200\n;((sum [p-biomass] of perennials) + (sum [a-biomass] of annuals)) / 8" ""
+"set-plot-x-range 0 50\nset-plot-y-range 0 200\n;((sum [p-biomass] of perennials) + (sum [a-biomass] of annuals)) / 8" ""
 PENS
 "Perennials" 1.0 1 -13345367 true "set-histogram-num-bars 5" "histogram [p-biomass] of perennials"
 "Annuals" 1.0 1 -10899396 true "set-histogram-num-bars 5" "histogram [a-biomass] of annuals"
