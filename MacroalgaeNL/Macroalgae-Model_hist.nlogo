@@ -2,8 +2,8 @@ breed [perennials a-perennial]
 breed [annuals a-annual]
 
 globals[
-  grazing
   ice
+  biomasa-lost-grazing
 ]
 
 patches-own[
@@ -41,12 +41,12 @@ to setup
   ]
   create-perennials perennials-ind [
     set color blue
-    set shape "plant"
-    set heading 90
+    ;set shape "circle"
+    ;set heading 90
     setxy random-pxcor random-pycor
     set p-biomass random perennial-biomass
     set age random 5
-    set size p-biomass / max [p-biomass] of perennials
+    set size age + .5 ; p-biomass / max [p-biomass] of perennials
   ]
   create-annuals annuals-ind [
     set color green
@@ -57,15 +57,15 @@ to setup
     set age 0
     set size (a-biomass / max [a-biomass] of annuals)
   ]
-  set grazing grazing-rate
   set ice ice-breakage
   reset-ticks
 end
 
 to go
-   ask turtles[
-    not-compete
-  ]
+;   ask turtles[
+;    not-compete
+;  ]
+  set biomasa-lost-grazing 0
   ask perennials[
     p-reproduce
     p-growth
@@ -79,9 +79,9 @@ to go
     a-graze-die
 
   ]
-    ask turtles[
-    not-compete
-  ]
+;    ask turtles[
+;    not-compete
+;  ]
   tick
 end
 
@@ -94,28 +94,33 @@ to p-growth
     ;show "me mori de vieje"
     die
   ]
-
+  set size age + 0.5
 end
 
 to p-reproduce
-  hatch random 5 [
+  hatch random propagule-number [
   set p-biomass random 30 + 1
-  set shape "circle"
+  ;set shape "circle"
   set color blue
-  set size p-biomass / max [p-biomass] of perennials
   set age 0
-  set heading 90
-  ifelse hardness > max [hardness] of neighbors
-    [stop]
+  set size age + 0.5 ;+ p-biomass / max [p-biomass] of perennials
+  set heading random 360
+  fd  random 10
+  if hardness > 1 / 25
     [
-  rt random 180
-  fd random 8
+      ;show "se muere el propagulo"
+      die
+    ]
+  ;show "Nacio un propagulo"
+  if count turtles-here > 5
+    [
+      die
     ]
   ]
 end
 
 to a-growth
-   set a-biomass 0 + int-growth-rate * temperature  * (1 / depth)
+  set a-biomass 0 + int-growth-rate * temperature  * (1 / depth)
   set age age + 1
   if age >= 1 [
     ;show "me mori de vieje"
@@ -124,7 +129,7 @@ to a-growth
 end
 
 to a-reproduce
-  hatch random 5 [
+  hatch random propagule-number [
   set a-biomass random 30 + 1
   set shape "circle"
   set color green
@@ -149,15 +154,18 @@ to not-compete
 end
 
 to p-graze-die
-  set p-biomass p-biomass - grazing * depth * p-biomass
-    if p-biomass <= 0 [
+  set p-biomass p-biomass - grazing-rate * depth * p-biomass
+  if p-biomass <= 0 [
     ;show "mori por herbivoría"
     die
   ]
+  set biomasa-lost-grazing biomasa-lost-grazing + grazing-rate * depth * p-biomass
+  ;show word "p-biomass" p-biomass
+
 end
 
 to a-graze-die
-  set a-biomass a-biomass - grazing * depth * a-biomass
+  set a-biomass a-biomass - grazing-rate * depth * a-biomass
     if a-biomass <= 0 [
     ;show "mori por herbivoría"
     die
@@ -177,13 +185,12 @@ to a-ice-die
     ;show "mori aplastado por hielo"
     die]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 210
 10
-648
-457
+691
+501
 -1
 -1
 9.275
@@ -249,7 +256,7 @@ perennials-ind
 perennials-ind
 0
 100
-10.0
+11.0
 1
 1
 NIL
@@ -264,7 +271,7 @@ annuals-ind
 annuals-ind
 0
 100
-10.0
+0.0
 1
 1
 NIL
@@ -331,9 +338,9 @@ farenheit
 HORIZONTAL
 
 MONITOR
-689
+723
 20
-882
+916
 65
 perennial mean biomass watcher
 mean [p-biomass] of perennials
@@ -342,9 +349,9 @@ mean [p-biomass] of perennials
 11
 
 MONITOR
-888
+922
 18
-1073
+1107
 63
 annuals mean biomass watcher
 mean [a-biomass] of annuals
@@ -353,9 +360,9 @@ mean [a-biomass] of annuals
 11
 
 MONITOR
-691
+725
 72
-817
+851
 117
 Max algae per patch
 max [count turtles-here] of patches
@@ -382,10 +389,10 @@ PENS
 "default" 1.0 0 -16777216 true "" "plot count turtles"
 
 PLOT
-679
-323
-868
-446
+729
+335
+918
+458
 Perennials count
 NIL
 NIL
@@ -400,10 +407,10 @@ PENS
 "default" 1.0 0 -14454117 true "" "plot count perennials"
 
 PLOT
-879
-324
-1067
-448
+929
+336
+1117
+460
 Annuals count
 NIL
 NIL
@@ -426,16 +433,16 @@ grazing-rate
 grazing-rate
 0
 1
-0.5
-0.1
+0.0
+0.01
 1
 NIL
 HORIZONTAL
 
 MONITOR
-836
+870
 71
-1008
+1042
 116
 NIL
 min[p-biomass] of perennials
@@ -452,7 +459,7 @@ ice-breakage
 ice-breakage
 0
 1
-0.5
+0.0
 0.1
 1
 NIL
@@ -478,13 +485,39 @@ PENS
 "Annuals" 1.0 1 -10899396 true "set-histogram-num-bars 5" "histogram [a-biomass] of annuals"
 
 MONITOR
-1080
+1114
 17
-1178
+1212
 62
 Total Biomass
 (sum [p-biomass] of perennials) + (sum [a-biomass] of annuals)
 2
+1
+11
+
+SLIDER
+14
+434
+204
+468
+Propagule-number
+Propagule-number
+0
+100
+9.0
+1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+728
+484
+878
+530
+NIL
+biomasa-lost-grazing
+4
 1
 11
 
