@@ -34,6 +34,10 @@ to setup
   ]
 ;  set q 0.4
 
+  if file-exists? "TestOutput.csv"
+  [file-delete "TestOutput.csv"]
+  file-open "TestOutput.csv"
+
   reset-ticks
 end
 
@@ -46,17 +50,29 @@ to go
   if ticks >= 1000 [
     output-write "Corridor width:"
     output-print corridor-width
+    file-close
     stop
   ]
 end
 
+
+
+; The butterfly move procedure, which is in turtle context
 to move
+  ; First, write some test output:
+  ; elevation of all neighbors
+  ask neighbors [file-type (word elevation ",")]
+  ; Decide whether to move uphill with probability q
   ifelse random-float 1.0 < q
   [ uphill elevation ]
-  [ move-to one-of neighbors ]
-
+  ; Move uphill
+  [ move-to one-of neighbors ] ; Otherwise randomly
+                               ; Write the elevation turtle moved to,
+                               ; using "print" to get a carriage return.
+  file-print elevation
   set used? true
-end
+
+end ; of move procedure
 
 to-report corridor-width
   let num-patches-used count patches with [used? = true]
