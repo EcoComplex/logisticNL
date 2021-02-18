@@ -1,0 +1,32 @@
+Parameters to be used in the model
+
+Growth rate:
+
+Net photosynthetic rates (Pmax) were high in the brown alga Desmarestia anceps and 
+the red algae Palmaria decipiens with values close to 33 and 36 umol O2 g-1 h-1, 
+respectively, at 20 m depth.
+
+Figs 21-26 (perennial) and 27-32 (annual) from Wiencke 1990 - Seasonality of brown macroalgae 
+from Antarctica—a long-term culture study under fluctuating Antarctic daylengths
+
+Figs 21-26 (annual) from Wiencke 1990 - Seasonality of red and green macroalgae from 
+Antarctica—long-term culture study under fluctuating Antarctic daylengths
+
+Table 1 from Quartino & Boraso de Zaixso 2008 - Summer macroalgal biomass in Potter Cove,
+South Shetland Is., Antarctica: its production and flux to the system
+
+
+Propagule release and settlement:
+
+
+Graze rate:
+
+Grazing is probably the most important biotic factor controlling the structure andcomposition of seaweed-dominated communities. In Antarctic benthic systems, theearly successional stages dominated by small-sized seaweeds and periphyton representexcellent models to study how grazing modifies different ecological propertiesnot only of native assemblages but also of alien species, whose arrival and establishmentwill be stimulated by climate warming. Antarctic Seaweeds book (2020).
+
+
+Ice-mortality rate (ice scouring):
+
+Fig 1 from Barnes et al 2018 - Icebergs, sea ice, blue carbon and Antarctic climate feedbacks
+
+Fig 1 and Table 2 from Barnes 2016 - Iceberg killing fields limit huge potential for 
+benthic blue carbon in Antarctic shallows
