@@ -3,7 +3,8 @@ breed [annuals a-annual]
 
 globals[
   ice
-  biomasa-lost-grazing
+  p-biomass-lost-grazing
+  a-biomass-lost-grazing
 ]
 
 patches-own[
@@ -46,16 +47,16 @@ to setup
     setxy random-pxcor random-pycor
     set p-biomass random perennial-biomass
     set age random 5
-    set size age + .5 ; p-biomass / max [p-biomass] of perennials
+    set size age + .2 ; p-biomass / max [p-biomass] of perennials
   ]
   create-annuals annuals-ind [
     set color green
-    set shape "plant"
-    set heading 270
+    ;set shape "circle"
+    ;set heading 270
     setxy random-pxcor random-pycor
     set a-biomass random annual-biomass
     set age 0
-    set size (a-biomass / max [a-biomass] of annuals)
+    set size age + .5 ;(a-biomass / max [a-biomass] of annuals)
   ]
   set ice ice-breakage
   reset-ticks
@@ -65,7 +66,8 @@ to go
 ;   ask turtles[
 ;    not-compete
 ;  ]
-  set biomasa-lost-grazing 0
+  set p-biomass-lost-grazing 0
+  set a-biomass-lost-grazing 0
   ask perennials[
     p-reproduce
     p-growth
@@ -131,20 +133,23 @@ end
 to a-reproduce
   hatch random propagule-number [
   set a-biomass random 30 + 1
-  set shape "circle"
+  ;set shape "circle"
   set color green
-  set size a-biomass / max [a-biomass] of annuals
-  set heading 270
-  ifelse hardness < max [hardness] of neighbors
-    [stop]
-    [
-  rt random 180
-  fd random 8
-    ]
   set age 0
+  set size age + .5 ;a-biomass / max [a-biomass] of annuals
+  set heading random 360
+  fd random 10
+  if hardness < 1 / 25
+    [
+      die
+    ]
+  if count turtles-here > 5
+    [
+      die
+    ]
   ]
+
   ;show "cumpli mi ciclo de vida"
-  die
 end
 
 to not-compete
@@ -159,7 +164,7 @@ to p-graze-die
     ;show "mori por herbivoría"
     die
   ]
-  set biomasa-lost-grazing biomasa-lost-grazing + grazing-rate * depth * p-biomass
+  set p-biomass-lost-grazing p-biomass-lost-grazing + grazing-rate * depth * p-biomass
   ;show word "p-biomass" p-biomass
 
 end
@@ -170,6 +175,7 @@ to a-graze-die
     ;show "mori por herbivoría"
     die
   ]
+  set a-biomass-lost-grazing a-biomass-lost-grazing + grazing-rate * depth * a-biomass
 end
 
 to p-ice-die
@@ -271,7 +277,7 @@ annuals-ind
 annuals-ind
 0
 100
-0.0
+20.0
 1
 1
 NIL
@@ -499,7 +505,7 @@ SLIDER
 14
 434
 204
-468
+467
 Propagule-number
 Propagule-number
 0
@@ -513,11 +519,22 @@ HORIZONTAL
 MONITOR
 728
 484
-878
-530
-NIL
-biomasa-lost-grazing
+882
+529
+Perennial Biomass Grazed
+p-biomass-lost-grazing
 4
+1
+11
+
+MONITOR
+889
+484
+1030
+529
+Annual Biomass Grazed
+a-biomass-lost-grazing
+17
 1
 11
 
